@@ -1,0 +1,3 @@
+[submodule "ptycho_pmace"]
+	path = ptycho_pmace
+	url = https://github.com/cabouman/ptycho_pmace
