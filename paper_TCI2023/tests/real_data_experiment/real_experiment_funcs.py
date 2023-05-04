@@ -1,13 +1,14 @@
-from ptycho_pmace.utils.utils import *
-from ptycho_pmace.utils.display import *
+from utils.utils import *
+from utils.display import *
+from scipy import ndimage
 
 
 '''
-This file defines the functions needed for displaying experimental results. 
+This file defines the functions needed for displaying and saving experimental results. 
 '''
 
 
-def plot_goldball_img(cmplx_img, ref_img=None, display_win=None, display=False, img_title=None, save_dir=None):
+def plot_goldball_img(cmplx_img, ref_img=None, display_win=None, phase_norm_win=None, display=False, img_title=None, save_dir=None):
     """ Function to plot reconstruction results in this experiment. """
     # check directory
     if save_dir is not None:
@@ -17,18 +18,25 @@ def plot_goldball_img(cmplx_img, ref_img=None, display_win=None, display=False, 
     # initialize window and determine area for showing and comparing images
     if display_win is None:
         display_win = np.ones_like(cmplx_img, dtype=np.complex64)
-    non_zero_idx = np.nonzero(display_win)
-    a, b = np.maximum(0, np.amin(non_zero_idx[0])), np.minimum(cmplx_img.shape[0], np.amax(non_zero_idx[0]) + 1)
-    c, d = np.maximum(0, np.amin(non_zero_idx[1])), np.minimum(cmplx_img.shape[1], np.amax(non_zero_idx[1]) + 1)
-    win_img = cmplx_img[a:b, c:d]
+    display_win_idx = np.nonzero(display_win)
+    a, b = np.maximum(0, np.amin(display_win_idx[0])), np.minimum(cmplx_img.shape[0], np.amax(display_win_idx[0]) + 1)
+    c, d = np.maximum(0, np.amin(display_win_idx[1])), np.minimum(cmplx_img.shape[1], np.amax(display_win_idx[1]) + 1)
+    win_img = ndimage.rotate(cmplx_img[a:b, c:d], 180)
+    
+    if phase_norm_win is None:
+        phase_norm_win = np.ones_like(win_img)
+    norm_win_idx = np.nonzero(phase_norm_win)
+    norm_win_a, norm_win_b = np.maximum(0, np.amin(norm_win_idx[0])), np.minimum(win_img.shape[0], np.amax(norm_win_idx[0]) + 1)
+    norm_win_c, norm_win_d = np.maximum(0, np.amin(norm_win_idx[1])), np.minimum(win_img.shape[1], np.amax(norm_win_idx[1]) + 1)
+    phase_norm_img = win_img[norm_win_a:norm_win_b, norm_win_c:norm_win_d]
     
     # normalization using reference image
     if ref_img is not None:
         win_ref_img = ref_img[a:b, c:d]
         win_img = phase_norm(win_img, win_ref_img)
-    
+
     # subtract mean from phase
-    norm_img = np.abs(win_img) * np.exp(1j * (np.angle(win_img) - np.mean(np.angle(win_img))))
+    norm_img = np.abs(win_img) * np.exp(1j * (np.angle(win_img) - np.mean(np.angle(phase_norm_img))))
  
     # define formatting of plots
     fig_args = dict(bbox_inches='tight', pad_inches=0, dpi=160)

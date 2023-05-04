@@ -1,10 +1,10 @@
 import argparse, yaml
 import datetime as dt
 from shutil import copyfile
-from ptycho import *
-from ptycho.pie import *
-from ptycho_pmace.ptycho.pmace import *
-from ptycho_pmace.utils.utils import *
+from paper_TCI2023.ptycho import *
+from paper_TCI2023.ptycho.pie import *
+from paper_TCI2023.ptycho_pmace.pmace.pmace import *
+from utils.utils import *
 from real_experiment_funcs import *
 
 
@@ -38,7 +38,8 @@ def main():
     probe_dir = config['data']['probe_dir']
     data_dir = config['data']['data_dir']
     display = config['data']['display']
-    window_coords = config['data']['window_coords']
+    comparison_win_crds = config['data']['comparison_win_coords']
+    phase_norm_win_crds = config['data']['phase_norm_win_coords']
     out_dir = config['output']['out_dir']
     
     # download dataset. 
@@ -82,17 +83,25 @@ def main():
     init_obj = np.ones((img_sz, img_sz), dtype=np.complex64)
 
     # Produce the cover/window for comparison
-    if window_coords is not None:
-        xmin, xmax, ymin, ymax = window_coords[0], window_coords[1], window_coords[2], window_coords[3]
+    if comparison_win_crds is not None:
+        xmin, xmax, ymin, ymax = comparison_win_crds[0], comparison_win_crds[1], comparison_win_crds[2], comparison_win_crds[3]
         recon_win = np.zeros(init_obj.shape)
         recon_win[xmin:xmax, ymin:ymax] = 1
     else:
         recon_win = None
+        
+    # Produce the cover/window for phase normalization
+    if phase_norm_win_crds is not None:
+        xmin, xmax, ymin, ymax = phase_norm_win_crds[0], phase_norm_win_crds[1], phase_norm_win_crds[2], phase_norm_win_crds[3]
+        phase_norm_win = np.zeros(init_obj.shape)
+        phase_norm_win[xmin:xmax, ymin:ymax] = 1
+    else:
+        phase_norm_win = None
 
     # Reconstruction parameters
     recon_args = dict(init_obj=init_obj, ref_probe=ref_probe, recon_win=recon_win, 
                       num_iter=config['recon']['num_iter'], joint_recon=config['recon']['joint_recon'])
-    fig_args = dict(display_win=recon_win, display=display)
+    fig_args = dict(display_win=recon_win, phase_norm_win=phase_norm_win, display=display)
 
     # PMACE recon
     alpha = config['PMACE']['alpha']                
@@ -100,7 +109,7 @@ def main():
     probe_exp = config['PMACE']['probe_exponent']      # probe exponent
     pmace_dir = save_dir + 'PMACE/'
     pmace_result = pmace_recon(y_meas, patch_bounds, obj_data_fit_prm=alpha, rho=rho, probe_exp=probe_exp, 
-                                     add_reg=False, save_dir=pmace_dir, **recon_args)
+                               add_reg=False, save_dir=pmace_dir, **recon_args)
     # Plot reconstructed image
     plot_goldball_img(pmace_result['object'], save_dir=pmace_dir, **fig_args)
     
@@ -123,13 +132,6 @@ def main():
     sharp_result = sharp.sharp_recon(y_meas, patch_bounds, relax_pm=relax_pm, save_dir=sharp_dir,**recon_args)
     # Plot reconstructed image
     plot_goldball_img(sharp_result['object'], ref_img=pmace_result['object'], save_dir=sharp_dir, **fig_args)
-
-    # # SHARP+ recon
-    # sharp_plus_pm = config['SHARP_plus']['relax_pm']
-    # sharp_plus_dir = save_dir + 'SHARP_plus/'
-    # sharp_plus_result = sharp.sharp_plus_recon(y_meas, patch_bounds, relax_pm=sharp_plus_pm, save_dir=sharp_plus_dir, **recon_args)
-    # # Plot reconstructed image
-    # plot_goldball_img(sharp_plus_result['object'], ref_img=pmace_result['object'], save_dir=sharp_plus_dir, **fig_args)
 
     # Save config file to output directory
     if not os.path.exists(save_dir):
