@@ -9,7 +9,13 @@ Zhai, Qiuchen, Gregery T. Buzzard, Kevin Mertes, Brendt Wohlberg, and Charles A.
  
 We provide the parameters and data needed to reproduce our paper results for PMACE and competing approaches which are implemented for research use. These may be used as inputs to our scripts for reproducibility. Additionally, the configuration files and results of our demo and tests are available at [output link](https://drive.google.com/drive/folders/1feA5LdkEjVJhqhyFRu7ErgqwKa9Nbkxp?usp=sharing).
  
- 
+* To download the required ``ptycho_pmace`` package, run the following command:
+  ```console
+  cd paper_TCI2023/
+  git clone -b v0.0.2 https://github.com/cabouman/ptycho_pmace.git
+  ```
+
+
 * To reproduce the reconstructed transmittance images on synthetic data, please follow these steps:
  
   1. Specify the configuration file located under 'tests/synthetic_data_experiment/config/'
