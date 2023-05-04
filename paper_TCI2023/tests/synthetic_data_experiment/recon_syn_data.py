@@ -1,10 +1,10 @@
 import argparse, yaml, os
 import datetime as dt
 from shutil import copyfile
-from ptycho import *
-from ptycho.pie import *
-from ptycho_pmace.ptycho.pmace import *
-from ptycho_pmace.utils.utils import *
+from paper_TCI2023.ptycho import *
+from paper_TCI2023.ptycho.pie import *
+from paper_TCI2023.ptycho_pmace.pmace.pmace import *
+from utils.utils import *
 from syn_experiment_funcs import *
 
 
@@ -99,14 +99,6 @@ def main():
                                      add_reg=False, save_dir=pmace_dir, **recon_args)
     plot_synthetic_img(pmace_result['object'], img_title='PMACE', save_dir=pmace_dir, **fig_args)
 
-    ## reg-PMACE recon
-    #alpha = config['reg-PMACE']['data_fit_prm']
-    #sigma = config['reg-PMACE']['bm3d_psd']      
-    #reg_pmace_dir = save_dir + config['reg-PMACE']['out_dir'] + 'alpha_{}_sigma_{}/'.format(alpha, sigma)
-    #reg_pmace_result = pmace.pmace_recon(y_meas, patch_bounds, obj_data_fit_prm=alpha, 
-    #                                     add_reg=True, sigma=sigma, save_dir=reg_pmace_dir, **recon_args)
-    #plot_synthetic_img(reg_pmace_result['object'], img_title='reg-PMACE', save_dir=reg_pmace_dir, **fig_args)
-
     # ePIE recon
     obj_step_sz = config['ePIE']['obj_step_sz']
     epie_dir = save_dir + config['ePIE']['out_dir']
@@ -123,12 +115,6 @@ def main():
     sharp_dir = save_dir + config['SHARP']['out_dir']
     sharp_result = sharp.sharp_recon(y_meas, patch_bounds, relax_pm=relax_prm, save_dir=sharp_dir, **recon_args)
     plot_synthetic_img(sharp_result['object'], img_title='SHARP', save_dir=sharp_dir, **fig_args)
-
-    # # SHARP+ recon
-    # relax_prm = config['SHARP_plus']['relax_prm']
-    # sharp_plus_dir = save_dir + config['SHARP_plus']['out_dir']
-    # sharp_plus_result = sharp.sharp_plus_recon(y_meas, patch_bounds, relax_pm=relax_prm, save_dir=sharp_plus_dir, **recon_args)
-    # plot_synthetic_img(sharp_plus_result['object'], img_title='SHARP+', save_dir=sharp_plus_dir, **fig_args)
 
     # Save config file to output directory
     if not os.path.exists(save_dir):
