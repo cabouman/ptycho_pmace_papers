@@ -1,3 +1,6 @@
 [submodule "ptycho_pmace"]
 	path = ptycho_pmace
 	url = https://github.com/cabouman/ptycho_pmace
+[submodule "paper_TCI2023/ptycho_pmace"]
+	path = paper_TCI2023/ptycho_pmace
+	url = https://github.com/cabouman/ptycho_pmace.git
