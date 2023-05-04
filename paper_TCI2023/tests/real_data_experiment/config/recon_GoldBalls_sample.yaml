@@ -8,7 +8,7 @@ data:
   phase_norm_win_coords: [185, 250, 140, 245]
   display: False
 recon:
-  num_iter: 10
+  num_iter: 100
   joint_recon: False
 ePIE:
   obj_step_sz: 1
