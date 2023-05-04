@@ -1,7 +1,7 @@
 import time
 from tqdm import tqdm
-from ptycho_pmace.utils.utils import *
-from ptycho_pmace.utils.nrmse import *
+from paper_TCI2023.ptycho_pmace.utils.utils import *
+from paper_TCI2023.ptycho_pmace.utils.nrmse import *
 
 
 def wf_obj_func(cur_est, probe, y_meas, patch_bounds, discretized_sys_mat, prm=1):
