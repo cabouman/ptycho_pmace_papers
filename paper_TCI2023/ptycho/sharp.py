@@ -1,7 +1,7 @@
 import time
 from tqdm import tqdm
-from paper_TCI2023.ptycho_pmace.utils.utils import *
-from paper_TCI2023.ptycho_pmace.utils.nrmse import *
+from paper_TCI2023.ptycho_pmace.pmace.utils import *
+from paper_TCI2023.ptycho_pmace.pmace.nrmse import *
 
 
 def fourier_projector(frame_data, y_meas):

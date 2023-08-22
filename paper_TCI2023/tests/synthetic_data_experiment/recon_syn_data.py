@@ -4,7 +4,6 @@ from shutil import copyfile
 from paper_TCI2023.ptycho import *
 from paper_TCI2023.ptycho.pie import *
 from paper_TCI2023.ptycho_pmace.pmace.pmace import *
-from utils.utils import *
 from syn_experiment_funcs import *
 
 

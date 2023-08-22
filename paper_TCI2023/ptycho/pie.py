@@ -1,8 +1,8 @@
 import time
 from random import shuffle
 from tqdm import tqdm
-from paper_TCI2023.ptycho_pmace.utils.utils import *
-from paper_TCI2023.ptycho_pmace.utils.nrmse import *
+from paper_TCI2023.ptycho_pmace.pmace.utils import *
+from paper_TCI2023.ptycho_pmace.pmace.nrmse import *
 
 
 def epie_recon(y_meas, patch_bounds, init_obj, init_probe=None, ref_obj=None, ref_probe=None,
