@@ -1,5 +1,7 @@
 # ptycho_pmace_papers
-Repo containing ptychography reconstruction comparisons from publications
+Repo containing ptychography reconstruction comparisons from publications.
+
+For additional information on PMACE and its latest developments, please click the provided link to the [PMACE repository](https://github.com/cabouman/ptycho_pmace).
 
 ## Installation
 1. Download the source code:
